@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<div style="padding-left:250px; padding-right:250px">
+    <select id="kurs" class="form-select" aria-label="Default select example">
+        <option selected>Выберите валюту</option>
+        <option value="valute/">Доллар США</option>
+        <option value="valute/">Евро</option>
+        <option value="valute/">Фунт стерлингов</option>
+    </select>
+
+        <script>
+  document.getElementById('kurs').addEventListener('change', function() {
+    var url = window.location.href.split('?')[0] + this.value;
+    window.location.href = url;
+  });
+</script>
+</div>
+{% endblock %}
