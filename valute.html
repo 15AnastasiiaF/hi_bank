@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block valute %}
+<div class="row" style="text-align:center">
+    <div class="col-4 border">
+        <form action="{% url 'valute' %}" method="POST" class="mt-2">
+            {% csrf_token %}
+            <div class="mb-3 mx-5">
+                <label class="form-label">Валюта</label>
+                <select name="id" class="form-select" aria-label="Default select example">
+                    {% for id, name in all_valutes %}
+                    <option value="{{ id }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3 mx-5">
+                <label for="exampleFormControlInput1" class="form-label">Начальная дата</label>
+                <input name="startDate" type="date" class="form-control" id="exampleFormControlInput1" max="{{ today }}">
+            </div>
+            <div class="mb-3 mx-5">
+                <label for="exampleFormControlInput1" class="form-label">Финальная дата</label>
+                <input name="endDate" type="date" class="form-control" id="exampleFormControlInput1" max="{{ today }}">
+            </div>
+            <button type="submit" class="btn btn-primary mb-3">Построить график</button>
+        </form>
+    </div>
+    <div class="col-8 border">
+        <canvas class="mt-2" id="chart" height="200"></canvas>
+    </div>
+</div>
+<script>
+    let ctx = document.getElementById("chart").getContext("2d");
+    
+    let chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+         labels: [{% for dt in dates %}"{{ dt }}",{% endfor %}],
+         datasets: [
+            {
+              label: "Цена (₽)",
+              backgroundColor: "#79AEC8",
+              borderColor: "#417690",
+              data: [{% for val in rates %}"{{ val }}",{% endfor %}]
+            }
+         ]
+      },
+      options: {
+         title: {
+            text: "valute course",
+            display: false
+         }
+      }
+    });
+</script>
+{% endblock %}
